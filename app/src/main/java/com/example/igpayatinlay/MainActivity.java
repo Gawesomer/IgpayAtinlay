@@ -119,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                setOutputButton(s.toString());
+                setOutputButton(convertToPigLatin(s.toString()));
             }
         });
     }
@@ -168,6 +168,35 @@ public class MainActivity extends AppCompatActivity {
                 inputBox.setText(result.get(0).toString());
             }
         }
+    }
+
+    private String convertToPigLatin(String input) {
+        StringBuilder result = new StringBuilder();
+        String[] words = input.split(" ");
+        for (String word : words) {
+            if (isAVowel(word.charAt(0))) {
+                result.append(word);
+                result.append("way ");
+            } else {
+                result.append(moveConsonants(word));
+                result.append("ay ");
+            }
+        }
+        return result.toString();
+    }
+
+    private boolean isAVowel(char c) {
+        return "aeiouy".indexOf(c) != -1;
+    }
+
+    private String moveConsonants(String word) {
+        StringBuilder consonants = new StringBuilder();
+        int i = 0;
+        while (i < word.length() && !isAVowel(word.charAt(i))) {
+            consonants.append(word.charAt(i));
+            i++;
+        }
+        return word.substring(i) + consonants.toString();
     }
 
 }
