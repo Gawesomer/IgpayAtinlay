@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">IgpayAtinlay</string>
+    <string name="input_box_hint">Type text here</string>
+    <string name="mic_icon_content_description">mic</string>
 </resources>
