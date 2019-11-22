@@ -119,7 +119,11 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                setOutputButton(convertToPigLatin(s.toString()));
+                if (s.length() == 0) {
+                    setOutputButton("");
+                } else {
+                    setOutputButton(convertToPigLatin(s.toString()));
+                }
             }
         });
     }
