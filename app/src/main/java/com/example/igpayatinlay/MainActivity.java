@@ -18,7 +18,6 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -40,12 +39,14 @@ public class MainActivity extends AppCompatActivity {
         inputBox = findViewById(R.id.inputTextBox);
         ConstraintLayout masterContainer = findViewById(R.id.constraintLayout);
         setupUI(masterContainer);
-
         initTextToSpeech();
         initInputBox();
     }
 
     /**
+     * Should only be called once on startup.
+     * Initializes the TTS object.
+     * Creates a toast informing user of failure in case of initialization failure.
      * Reference: https://javapapers.com/android/android-text-to-speech-tutorial/
      */
     private void initTextToSpeech() {
@@ -63,18 +64,29 @@ public class MainActivity extends AppCompatActivity {
                     }
                     Log.i("TTS", "Initialization success.");
                 } else {
-                    Toast.makeText(getApplicationContext(), "TTS Initialization failed!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),
+                            "TTS Initialization failed!",
+                            Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
 
+    /**
+     * Should only be called once on startup.
+     * Initialize all non EditText views with an onTouchListener that hides the keyboard.
+     * Only works for our purposes as the UI only has one EditText view.
+     * Credit: Navneeth G, StackOverflow
+     * Reference: https://stackoverflow.com/questions/4165414/how-to-hide-soft-keyboard-on-android-after-clicking-outside-edittext
+     * @param view Parent container view
+     */
     public void setupUI(View view) {
 
         // Set up touch listener for non-text box views to hide keyboard.
         if (!(view instanceof EditText)) {
             view.setOnTouchListener(new View.OnTouchListener() {
                 public boolean onTouch(View v, MotionEvent event) {
+                    v.performClick();
                     hideSoftKeyboard(mActivity);
                     return false;
                 }
@@ -91,8 +103,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Reference: Navneeth G - https://stackoverflow.com/questions/4165414/how-to-hide-soft-keyboard-on-android-after-clicking-outside-edittext
-     * @param activity -  The current activity
+     * Hides the keyboard.
+     * Credit: Navneeth G, StackOverflow
+     * Reference: https://stackoverflow.com/questions/4165414/how-to-hide-soft-keyboard-on-android-after-clicking-outside-edittext
+     * @param activity The current activity
      */
     public static void hideSoftKeyboard(Activity activity) {
         InputMethodManager inputMethodManager =
@@ -105,6 +119,10 @@ public class MainActivity extends AppCompatActivity {
                 currentFocus.getWindowToken(), 0);
     }
 
+    /**
+     * Should only be called once on startup.
+     * Initializes a TextChangedListener for the input field.
+     */
     private void initInputBox() {
         inputBox.addTextChangedListener(new TextWatcher() {
             @Override
@@ -117,6 +135,10 @@ public class MainActivity extends AppCompatActivity {
 
             }
 
+            /**
+             * Convert contents of input field to pig latin and display in output box.
+             * @param s Contents of the input field
+             */
             @Override
             public void afterTextChanged(Editable s) {
                 if (s.length() == 0) {
@@ -128,11 +150,21 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Sets the content of the output button to that of the given string.
+     * @param input String to set contents of button to.
+     */
     private void setOutputButton(String input) {
         Button outputButton = findViewById(R.id.buttonOutput);
         outputButton.setText(input);
     }
 
+    /**
+     * Method to execute when the output field is clicked.
+     * Uses TextToSpeech to dictate button text.
+     * Error message is logged on TextToSpeech error.
+     * @param view Necessary argument for button click methods.
+     */
     public void outputButtonClick(View view) {
         Button outputButton = findViewById(R.id.buttonOutput);
         String outputString = outputButton.getText().toString();
@@ -144,8 +176,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
+     * Method to execute when mic button is clicked.
+     * Start the SpeechRecognizer for speech to text recognition.
+     * Voice recognition activity is started on success, else toast error message is printed.
+     * Result from the RecognizerIntent is received from onActivityResult().
      * Reference: https://www.tutorialspoint.com/how-to-integrate-android-speech-to-text
-     * @param view - Necessary argument for button click methods.
+     * @param view Necessary argument for button click methods.
      */
     public void speakButtonClick(View view) {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
@@ -160,6 +196,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Receive the text converted from speech from the SpeechRecognizer activity.
+     * @param requestCode Identifies the request. Was passed to activity when started.
+     * @param resultCode Specifies if operation was successful or not.
+     * @param data Carries the result data.
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -173,30 +215,43 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Convert a string to pig latin
+     * If a word starts with a vowel, simply append "ay" to the word.
+     * If a word starts with a consonant, move starting consonants to end of word and append "way".
+     * @param input Input string that needs to be converted to pig latin
+     * @return String containing the input converted to pig latin
+     */
     private String convertToPigLatin(String input) {
         StringBuilder result = new StringBuilder();
         String[] words = input.split(" ");
         for (String word : words) {
-            if (word.equalsIgnoreCase("oinc")) {
+            if (isAVowel(word.charAt(0))) {
                 result.append(word);
-                result.append(" ");
+                result.append("way ");
             } else {
-                if (isAVowel(word.charAt(0))) {
-                    result.append(word);
-                    result.append("way ");
-                } else {
-                    result.append(moveConsonants(word));
-                    result.append("ay ");
-                }
+                result.append(moveConsonants(word));
+                result.append("ay ");
             }
         }
         return result.toString();
     }
 
+    /**
+     * Check if a character is a vowel.
+     * @param c Character to check.
+     * @return True if c is a vowel, False otherwise.
+     */
     private boolean isAVowel(char c) {
         return "aeiouy".indexOf(c) != -1;
     }
 
+    /**
+     * Moves first consonants to end of word.
+     * If word starts with a vowel, does nothing.
+     * @param word String containing a single word. No spaces.
+     * @return String containing word with first consonants moved to the end.
+     */
     private String moveConsonants(String word) {
         StringBuilder consonants = new StringBuilder();
         int i = 0;
