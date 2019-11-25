@@ -1,4 +1,4 @@
-package com.example.igpayatinlay;
+package com.gmail.jj.jouband.igpayatinlay;
 
 import org.junit.Test;
 

@@ -1,4 +1,4 @@
-package com.example.igpayatinlay;
+package com.gmail.jj.jouband.igpayatinlay;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
      * Reference: https://stackoverflow.com/questions/4165414/how-to-hide-soft-keyboard-on-android-after-clicking-outside-edittext
      * @param view Parent container view
      */
-    public void setupUI(View view) {
+    private void setupUI(View view) {
 
         // Set up touch listener for non-text box views to hide keyboard.
         if (!(view instanceof EditText)) {
@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
      * Reference: https://stackoverflow.com/questions/4165414/how-to-hide-soft-keyboard-on-android-after-clicking-outside-edittext
      * @param activity The current activity
      */
-    public static void hideSoftKeyboard(Activity activity) {
+    private static void hideSoftKeyboard(Activity activity) {
         InputMethodManager inputMethodManager =
                 (InputMethodManager) activity.getSystemService(
                         Activity.INPUT_METHOD_SERVICE);
@@ -165,6 +165,7 @@ public class MainActivity extends AppCompatActivity {
      * Error message is logged on TextToSpeech error.
      * @param view Necessary argument for button click methods.
      */
+    @SuppressWarnings("unused")
     public void outputButtonClick(View view) {
         Button outputButton = findViewById(R.id.buttonOutput);
         String outputString = outputButton.getText().toString();
@@ -183,6 +184,7 @@ public class MainActivity extends AppCompatActivity {
      * Reference: https://www.tutorialspoint.com/how-to-integrate-android-speech-to-text
      * @param view Necessary argument for button click methods.
      */
+    @SuppressWarnings("unused")
     public void speakButtonClick(View view) {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
