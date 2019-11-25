@@ -11,7 +11,6 @@ import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,15 +53,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onInit(int status) {
                 if (status == TextToSpeech.SUCCESS) {
-                    int ttsLang = textToSpeech.setLanguage(Locale.US);
-
-                    if (ttsLang == TextToSpeech.LANG_MISSING_DATA
-                            || ttsLang == TextToSpeech.LANG_NOT_SUPPORTED) {
-                        Log.e("TTS", "The language is not supported!");
-                    } else {
-                        Log.i("TTS", "Language Supported.");
-                    }
-                    Log.i("TTS", "Initialization success.");
+                    textToSpeech.setLanguage(Locale.US);
+//                    int ttsLang = textToSpeech.setLanguage(Locale.US);
+//
+//                    if (ttsLang == TextToSpeech.LANG_MISSING_DATA
+//                            || ttsLang == TextToSpeech.LANG_NOT_SUPPORTED) {
+//                        Log.e("TTS", "The language is not supported!");
+//                    } else {
+//                        Log.i("TTS", "Language Supported.");
+//                    }
+//                    Log.i("TTS", "Initialization success.");
                 } else {
                     Toast.makeText(getApplicationContext(),
                             "TTS Initialization failed!",
@@ -169,11 +169,12 @@ public class MainActivity extends AppCompatActivity {
     public void outputButtonClick(View view) {
         Button outputButton = findViewById(R.id.buttonOutput);
         String outputString = outputButton.getText().toString();
-        int speechStatus = textToSpeech.speak(outputString, TextToSpeech.QUEUE_FLUSH, null);
-
-        if (speechStatus == TextToSpeech.ERROR) {
-            Log.e("TTS", "Error in converting Text to Speech!");
-        }
+        textToSpeech.speak(outputString, TextToSpeech.QUEUE_FLUSH, null);
+//        int speechStatus = textToSpeech.speak(outputString, TextToSpeech.QUEUE_FLUSH, null);
+//
+//        if (speechStatus == TextToSpeech.ERROR) {
+//            Log.e("TTS", "Error in converting Text to Speech!");
+//        }
     }
 
     /**
