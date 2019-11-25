@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
 import android.text.Editable;
@@ -28,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
     private EditText inputBox;
     private TextToSpeech textToSpeech;
     private static final int TTS_REQUEST = 1;
+    private long lastMicClickTime;
+    private static long clickInterval = 1000;   // 1 second
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -187,6 +190,12 @@ public class MainActivity extends AppCompatActivity {
      */
     @SuppressWarnings("unused")
     public void speakButtonClick(View view) {
+        // Prevent double clicking mic button
+        if (SystemClock.elapsedRealtime() - lastMicClickTime < clickInterval) {
+            return;
+        }
+        lastMicClickTime = SystemClock.elapsedRealtime();
+
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());

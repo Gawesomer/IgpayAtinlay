@@ -14,7 +14,7 @@
         android:ems="10"
         android:gravity="start|top"
         android:importantForAutofill="no"
-        android:inputType="textMultiLine"
+        android:inputType="textEmailSubject"
         android:maxLength="150"
         android:hint="@string/input_box_hint"
         app:layout_constraintBottom_toBottomOf="parent"
