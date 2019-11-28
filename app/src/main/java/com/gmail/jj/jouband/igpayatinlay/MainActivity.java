@@ -235,15 +235,20 @@ public class MainActivity extends AppCompatActivity {
      * @return String containing the input converted to pig latin
      */
     private String convertToPigLatin(String input) {
+        if (input.length() == 0) {
+            return "";
+        }
         StringBuilder result = new StringBuilder();
         String[] words = input.split(" ");
         for (String word : words) {
-            if (isAVowel(word.charAt(0))) {
-                result.append(word);
-                result.append("way ");
-            } else {
-                result.append(moveConsonants(word));
-                result.append("ay ");
+            if (word.length() > 0) {
+                if (isAVowel(word.charAt(0))) {
+                    result.append(word);
+                    result.append("way ");
+                } else {
+                    result.append(moveConsonants(word));
+                    result.append("ay ");
+                }
             }
         }
         return result.toString();
