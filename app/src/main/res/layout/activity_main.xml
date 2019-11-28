@@ -10,13 +10,13 @@
     <EditText
         android:id="@+id/inputTextBox"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:ems="10"
         android:gravity="start|top"
+        android:hint="@string/input_box_hint"
         android:importantForAutofill="no"
         android:inputType="textEmailSubject"
         android:maxLength="150"
-        android:hint="@string/input_box_hint"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -38,8 +38,9 @@
         app:layout_constraintVertical_bias="0.1" />
 
     <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/micButton"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:background="?selectableItemBackground"
         android:contentDescription="@string/mic_icon_content_description"
         android:onClick="speakButtonClick"
