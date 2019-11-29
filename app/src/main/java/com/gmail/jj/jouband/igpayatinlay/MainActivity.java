@@ -182,6 +182,11 @@ public class MainActivity extends AppCompatActivity {
      */
     @SuppressWarnings("unused")
     public void outputButtonClick(View view) {
+        // Prevent double clicking output button
+        if (textToSpeech.isSpeaking()) {
+            return;
+        }
+
         Button outputButton = findViewById(R.id.buttonOutput);
         String outputString = outputButton.getText().toString();
         textToSpeech.stop();
