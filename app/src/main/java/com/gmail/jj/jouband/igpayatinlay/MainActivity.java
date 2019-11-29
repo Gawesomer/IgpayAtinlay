@@ -45,6 +45,18 @@ public class MainActivity extends AppCompatActivity {
         initInputBox();
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        textToSpeech.stop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        textToSpeech.shutdown();
+    }
+
     /**
      * Should only be called once on startup.
      * Initializes the TTS object.
@@ -172,6 +184,7 @@ public class MainActivity extends AppCompatActivity {
     public void outputButtonClick(View view) {
         Button outputButton = findViewById(R.id.buttonOutput);
         String outputString = outputButton.getText().toString();
+        textToSpeech.stop();
         textToSpeech.speak(outputString, TextToSpeech.QUEUE_FLUSH, null);
 //        int speechStatus = textToSpeech.speak(outputString, TextToSpeech.QUEUE_FLUSH, null);
 //
